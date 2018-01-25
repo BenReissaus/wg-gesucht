@@ -47,6 +47,8 @@ class Upranking:
         self.browser = webdriver.Chrome(config['path_to_driver'])
         self.username = config['username']
         self.password = config['password']
+        self.title1 = config['title1']
+        self.title2 = config['title2']
 
         self.logger.info("Successfully loaded config values.")
 
@@ -106,16 +108,14 @@ class Upranking:
         self.logger.info("Logged in.")
 
     def update_title(self):
-        title1 = u'Studium vorbei - suche WG in der Heimat !'
-        title2 = u'Studium vorbei - suche WG in der Heimat!'
         self.wait_till_element_loaded("Title input", By.ID, "title")
         title_element = self.browser.find_element_by_id('title')
 
         current_title = title_element.get_attribute('value')
         title_element.clear()
-        new_title = title1
-        if current_title == title1:
-            new_title = title2
+        new_title = self.title1
+        if current_title == self.title1:
+            new_title = self.title2
 
         title_element.send_keys(new_title)
         self.logger.info("Set title to '{}'".format(new_title))

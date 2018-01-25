@@ -2,3 +2,5 @@ username: [username]
 password: [password]
 path_to_driver: [path_to_driver]
 application_id: [application_id]
+title1: "Application title"
+title2: "Application title with whitespace "
