@@ -4,7 +4,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common import action_chains, keys
-from pyvirtualdisplay import Display
 import sys
 import time
 import yaml
@@ -20,7 +19,6 @@ class Upranking:
 
     def __init__(self):
         self.logger = logging.getLogger('wg-gesucht')
-        self.display = Display(visible=0, size=(800, 600))
         self.edit_url = 'https://www.wg-gesucht.de/gesuch-bearbeiten.html?edit={}'
         self.browser = None
         self.username = None
@@ -34,7 +32,6 @@ class Upranking:
         self.shut_down()
 
     def initialize(self):
-        self.display.start()
         self.load_config_values()
         self.initialize_logger()
 
@@ -44,7 +41,9 @@ class Upranking:
         config = yaml.safe_load(open(config_file_path))
 
         self.edit_url = self.edit_url.format(config['application_id'])
-        self.browser = webdriver.Chrome(config['path_to_driver'])
+        options = webdriver.ChromeOptions()
+        options.add_argument('headless')
+        self.browser = webdriver.Chrome(config['path_to_driver'], chrome_options=options)
         self.username = config['username']
         self.password = config['password']
         self.title1 = config['title1']
@@ -135,7 +134,6 @@ class Upranking:
 
     def shut_down(self):
         self.browser.close()
-        self.display.stop()
 
 if __name__ == '__main__':
     upranking = Upranking()
